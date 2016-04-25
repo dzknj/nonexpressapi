@@ -1,0 +1,65 @@
+For this assignment I used hapi as my framework. When I first started using it, i was a little confused about a lot of things, like routes and applying methods. For instance, when using express, when making a method for a REST request, it was all pretty much set up inline, like, router.post(/path, plugin, (req, res) => {
+	//functions and what to do here
+};
+With hapi, I liked how when making routes, you just make an object with a method property a path property and a handler property. You can add much more, like validation and authentication properties, but I liked how it was said up. So as opposed to th express way, a hapi example is:
+{
+method: GET,
+path: /path,
+handler: function(request, reply) => {
+// what to do goes here
+};
+It was a lot simpler to look back on code that I had written and see exactly what it does. Also, I like the fact that everything is written out as a property - value pair. 
+One thing that was annoying was that to get the request or response body, you have to do request.payload, which luckily enough, someone was also having the same issue and asked how to fix it on slack. It was in the docs how to do this, but it was really in there and it was not easy easy to find. 
+Another thing that was different than express was how to attach external routes to the server so you did not have to have a super large server.js file. It all came down to module exporting.
+For express, I would have to type app.use(/path, externalRouter);,
+and that would import the external router file as long as I exported it properly from the external routers file, but with hapi, this was not such an easy feat, until I figured it out through looking through many REST hapi app examples that I found online. 
+In order to use an external routes file with hapi, I had to type: 
+server.route(require(__dirname + /pathToExternalRoutesFile));
+and in the external routes file I had to export an array of all the routes that I had for that particular resource. for instance, i did:
+module.exports = [
+  {
+    method: GET,
+    path: /animals,
+    handler: function (request, reply) {
+      Animal.find(null, (err, data) => {
+        if(!err) reply(data);
+      });
+    }
+  }
+];
+and as long as I required in my Animal model to this file, all was good to go.
+I found this annoying at first, but once I understood how to do this the right way,(im sure there are more than one way to do this), I found it a simple matter to accomplish. Although with express I could just do app.use(/path, /externalRouter);
+In the external file, the routes were still written out inline, and not as easy to read, for instance, a route for express in my express assignment looks like:
+
+moviesRouter.get(/movies, (req, res) => {
+  Movie.find(null, (err,data) => {
+    if(err) return serverError(err, res);
+    res.status(200).json(data);
+  });
+});
+
+compared to hapi:
+module.exports = [
+  {
+    method: GET,
+    path: /animals,
+    handler: function (request, reply) {
+      Animal.find(null, (err, data) => {
+        if(!err) reply(data);
+      });
+    }
+  }
+]
+which in my opinion, hapi is easier to read.
+
+Another thing I liked about happy better than express, was that I did not have to parse or change any of the data formats, hapi automatically deals with the data input from any request and parses, or changes it to make it readable.
+With express I had to either do this manually, or include a plugin to do this for me, which in turn makes the code more difficult to understand, and to write. 
+So, you do not have to include a content type in your code. Hapi does all this for you without including a plugin like body-parser.
+In conclusion, I at first did not like hapi, but once I started working with it and understanding how it works, I like it better than express in a lot of ways. But I am new to coding and frameworks, so what do I know.
+One thing I do know, is that I learned a butt-load of stuff this weekend working with hapi, and now I feel confident that I could work with other frameworks that I have no experience with. All it takes is patience, and reading the docs, and looking at examples, and I can do it.
+As a result, I believe that I will find myself using packages and frameworks that I have no experience with in the future.
+This assignment was awesome. Thanks, and whoever is grading this,, YOU ROCK TOO!!!!
+-Dave Z
+
+
+
