@@ -51,7 +51,7 @@ describe('the POST and GET by name and DELETE methods', () => {
     request('localhost:7777')
     .put('/animals/cake')
     .send({name:'jake', type:'the dog'})
-    .end((err, res) => {
+    .end((err, res) => { // eslint-disable-line
       request('localhost:7777')
       .get('/animals/jake')
       .end((err, res) => {
